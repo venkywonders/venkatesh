@@ -1,0 +1,69 @@
+pipeline {
+    agent 'any'
+    stages {
+        stage('git-clone') {
+        steps {
+            sh '''
+            rm -rf venkatesh
+            pwd
+            ls -ll
+            git clone https://github.com/venkywonders/venkatesh.git
+            ls -ll
+            '''
+            
+        }
+    }
+         stage('compile') {
+        steps {
+            sh '''
+            pwd
+            cd $WORKSPACE
+            ls -ll
+            cd venkatesh
+            ls -ll
+            mvn compile
+            '''
+            
+        }
+    }
+        stage('test') {
+        steps {
+            sh '''
+            pwd
+            cd $WORKSPACE
+            cd venkatesh
+            ls -ll
+            mvn clean
+            mvn test
+            '''
+            
+        }
+    }
+    stage('quality') {
+        steps {
+            sh '''
+            pwd
+            cd $WORKSPACE
+            cd venkatesh
+            ls -ll
+            mvn sonar:sonar
+            '''
+            
+        }
+    }
+      stage('package') {
+        steps {
+            sh '''
+            pwd
+            cd $WORKSPACE
+            ls -ll
+            cd venkatesh
+            ls -ll
+            mvn package
+            '''
+            
+        }
+    }
+}
+
+}
